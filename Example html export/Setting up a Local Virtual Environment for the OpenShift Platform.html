@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<!-- saved from url=(0035)https://nataliakatrynska.github.io/ -->
+<html lang="en-US"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+
+<!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>Setting up a Local Virtual Environment for the OpenShift Platform | This repository contains all files related to the interview task.</title>
+<meta name="generator" content="Jekyll v3.7.4">
+<meta property="og:title" content="Setting up a Local Virtual Environment for the OpenShift Platform">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="This repository contains all files related to the interview task.">
+<meta property="og:description" content="This repository contains all files related to the interview task.">
+<link rel="canonical" href="https://nataliakatrynska.github.io/">
+<meta property="og:url" content="https://nataliakatrynska.github.io/">
+<meta property="og:site_name" content="Setting up a Local Virtual Environment for the OpenShift Platform">
+<script type="application/ld+json">
+{"@type":"WebSite","url":"https://nataliakatrynska.github.io/","name":"Setting up a Local Virtual Environment for the OpenShift Platform","headline":"Setting up a Local Virtual Environment for the OpenShift Platform","description":"This repository contains all files related to the interview task.","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <link rel="stylesheet" href="./Setting up a Local Virtual Environment for the OpenShift Platform_files/style.css">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Setting up a Local Virtual Environment for the OpenShift Platform</h1>
+      <h2 class="project-tagline">This repository contains all files related to the interview task.</h2>
+      
+      
+    </section>
+
+    <section class="main-content">
+      <h1 id="setting-up-a-local-virtual-environment-for-the-openshift-platform">Setting up a Local Virtual Environment for the OpenShift Platform</h1>
+
+<p>To freely develop the OpenShift platform and build on top of it other applications, you need to have access to a local environment. Since you use Windows as an operating system and the platform runs on RedHat Linux, the idea is to set up a virtual environment with the platform that reflects the real one on Amazon Web Services. You are going to use a set of tools that help you to aim this goal - all of them are listed below.</p>
+
+<p>This guide contains of two steps where the first one instructs you how to build a virtual machine and the second part presents how to make the virtual machine running with the OpenShift platform installed.</p>
+
+<h2 id="basic-terms">Basic Terms</h2>
+
+<p>Below you can find a list of the terms / plugins / applications mentioned in this guide:</p>
+
+<ul>
+  <li><strong>CentOS</strong>: A free RedHat Linux compatible image
+  – <a href="https://www.centos.org/">CentOS official website</a></li>
+  <li><strong>Local DEV cluster</strong>: A local environment that is a mirror of the remote Amazon Web Services (AWS) dev cluster with the OpenShift platform installed. The cluster enables you to commit required changes and give you full control while developing.</li>
+  <li><strong>OpenShift</strong> (the OpenShift platform): The platform installed on a remote AWS cluster.</li>
+  <li><strong>Remote DEV cluster</strong>: A remote Amazon Web Services (AWS) dev cluster with the OpenShift platform installed.</li>
+  <li><strong>Vagrant</strong> (version 2.0.2): Open-source software that enables you to build and maintain portable virtual environments, for example for VirtualBox.
+  – <a href="https://www.hashicorp.com/blog/hashicorp-vagrant-2-0-2">HashiCorp Vagrant 2.0.2 official website</a></li>
+  <li><strong>Vagrant image</strong> (Vagrant boxes): A base Vagrant image that allows to quickly clone a virtual machine.</li>
+  <li><strong>VirtualBox</strong> (version 5.2.12): A virtual machine provider
+  – <a href="https://www.virtualbox.org/">VirtualBox official website</a></li>
+</ul>
+
+<h2 id="prerequisites">Prerequisites</h2>
+<p>To run the OpenShift platform on a virtual machine, you will need the following tools installed:</p>
+
+<ul>
+  <li><strong>Apache Maven</strong></li>
+  <li><strong>Cygwin</strong></li>
+  <li><strong>Git</strong></li>
+  <li><strong>Maven</strong></li>
+  <li><strong>Nugrant</strong>: The installation details are provided in this guide.</li>
+  <li><strong>PowerShell version 4.0 or higher</strong>: At least 4.0 version is required since PowerShell is internally used by Vagrant and all lower versions make Vagrant freeze. The installation details are provided in this guide.</li>
+  <li><strong>Vagrant 2.0.2 / Vagrant 2.1.1</strong>: The installation details are provided in this guide.</li>
+  <li><strong>Vagrant image 1.0.6</strong></li>
+  <li><strong>VirtualBox 5.2.12</strong>: Note that Guest Additions are propagated to the image from your local VirtualBox therefore, it is required to have the proper version of VirtualBox installed.</li>
+  <li><strong>Windows 7 SP1</strong></li>
+</ul>
+
+<h2 id="step-1-building-a-centos-linux-virtual-machine-with-the-openshift-platform">Step 1: Building a CentOS Linux Virtual Machine with the OpenShift Platform</h2>
+
+<p>To build a Linux virtual environment for the OpenShift platform, follow the steps:</p>
+
+<blockquote>
+  <p><strong>Note</strong>: Keep in mind that you need to perform all commands from your root directory unless otherwise specified.</p>
+</blockquote>
+
+<ol>
+  <li>Install Packer:
+    <ol>
+      <li>Download and unzip the correct package from the Packer website:
+        <ul>
+          <li>For general information, go to the <a href="https://www.packer.io/">Packer official website</a></li>
+          <li>To learn more how to install Packer, go to the <a href="https://www.packer.io/intro/getting-started/install.html">Packer installation procedure</a></li>
+        </ul>
+      </li>
+      <li>Add the Packer directory to the <code class="highlighter-rouge">PATH</code>; see the <a href="https://stackoverflow.com/questions/1618280/where-can-i-set-path-to-make-exe-on-windows">instruction on setting it on Windows</a></li>
+    </ol>
+  </li>
+  <li>
+    <p>You need to have PowerShell, version 4.0 or higher, installed:</p>
+
+    <ol>
+      <li>Open PowerShell and type:
+        <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nv">$PSVersionTable</span>.PSVersion
+</code></pre></div>        </div>
+        <p>to determine the version.</p>
+      </li>
+      <li>If need be, upgrade PowerShell. Go to the <a href="https://www.microsoft.com/en-us/download/details.aspx?id=40855">Microsoft Windows Management Framework 4.0</a> page to download the package; you can also find the detailed installation instruction there.</li>
+    </ol>
+  </li>
+  <li>Check out the <code class="highlighter-rouge">box-build</code> sources from the <a href="http://git.server.com/box-build.git">Git repository project</a>.</li>
+  <li>Find the <code class="highlighter-rouge">centos-base-variables.json</code> file and edit it. Provide the credentials for the proxy server you use:
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="s2">"proxy"</span>: <span class="s2">"http://PROXY_USER:PROXY_PASSWORD_HERE@proxy.server.com:80/
+</span></code></pre></div>    </div>
+    <blockquote>
+      <p><strong>Note</strong>: Keep in mind that you need to encode non-alphanumeric characters.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>Double check whether all files in the project contain UNIX-style line endings. If not, you need to convert them to UNIX format line endings if you want to use them on the virtual machine.</p>
+  </li>
+  <li>
+    <p>Open Cygwin:</p>
+
+    <ol>
+      <li>Go to your project’s directory.</li>
+      <li>Set an environmental variable:
+        <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nb">export </span><span class="nv">ISO_URL</span><span class="o">=</span>”YOUR_ISO_URL”
+</code></pre></div>        </div>
+        <p>where:</p>
+
+        <p><code class="highlighter-rouge">YOUR_ISO_URL</code> must point to either the URL with the CentOS ISO image or to its location on a disk, for example <code class="highlighter-rouge">C:\\centos-image.iso</code>.</p>
+        <blockquote>
+          <p><strong>Note</strong>: 
+The <a href="http://isoredirect.centos.org/centos/7/isos/x86_64/CentOS-7-x86_64-DVD-1804.iso">CentOS-7-x86_64-DVD-1804.iso</a> (DVD) version is required.
+This is a Linux virtual machine, so keep in mind to escape backslashes with a backslash.</p>
+        </blockquote>
+      </li>
+      <li>Execute the following command:
+        <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> packer build <span class="nt">-var-file</span><span class="o">=</span>centos-base-variables.json <span class="nt">-force</span> centos-base.json
+</code></pre></div>        </div>
+      </li>
+      <li>Once the Packer build process has been completed, you should find the <code class="highlighter-rouge">centos-base.box</code> file in the current directory.</li>
+      <li>Find the <code class="highlighter-rouge">centos-openshift-variables.json</code> file and edit it. Provide the credentials for the proxy server you use:
+        <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="s2">"proxy_user"</span>: <span class="s2">"PROXY_USER"</span>, 
+ <span class="s2">"proxy_pass"</span>: <span class="s2">"PROXY_PASSWORD"</span>
+</code></pre></div>        </div>
+      </li>
+      <li>Open a Cygwin terminal and go to the project’s directory.</li>
+      <li>Execute the following command:
+        <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> packer build <span class="nt">-var-file</span><span class="o">=</span>centos-openshift-variables.json <span class="nt">-force</span> centos-openshift.json
+</code></pre></div>        </div>
+      </li>
+      <li>Once the Packer process has been completed, you will find the <code class="highlighter-rouge">centos-7-openshift.box</code> file.</li>
+    </ol>
+  </li>
+  <li>Upload the <code class="highlighter-rouge">centos-7-openshift.box</code> file to the <a href="http://maven.repository.com/">Maven repository</a>. Make sure that the credentials are configured for a server with the <code class="highlighter-rouge">user-upload</code> ID in your <code class="highlighter-rouge">~/.m2/settings.xml</code> file.
+    <ol>
+      <li>Execute the following command:
+        <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> mvn deploy:deploy-file <span class="nt">-DgroupId</span><span class="o">=</span>com.example <span class="nt">-DartifactId</span><span class="o">=</span>vagrant-centos-open-shift <span class="nt">-Dversion</span><span class="o">=</span>1.0.7 <span class="nt">-Dpackaging</span><span class="o">=</span>box <span class="nt">-Dfile</span><span class="o">=</span>centos-7-openshift.box <span class="nt">-DrepositoryId</span><span class="o">=</span>user-upload <span class="nt">-Durl</span><span class="o">=</span>http://maven.repository.com/content/repositories/releases
+</code></pre></div>        </div>
+      </li>
+    </ol>
+  </li>
+  <li>After successfully uploading the file, create a Git tag with the deployed version: 1.0.X.</li>
+  <li>Update <code class="highlighter-rouge">-Dversion</code> from the above command (step 7a.) according to the pattern 1.0.X+1 and push the file.</li>
+</ol>
+
+<h2 id="step-2-running-the-openshift-platform-on-your-virtual-machine">Step 2: Running the OpenShift Platform on Your Virtual Machine</h2>
+
+<p>Once the virtual machine has been built, you need to run the local virtual machine. To do so, perform the following steps:</p>
+
+<blockquote>
+  <p><strong>Note</strong>: Keep in mind that you need to execute all Vagrant commands in the root directory of the project.</p>
+</blockquote>
+
+<ol>
+  <li>Install Vagrant:
+    <ol>
+      <li>Download the package from the Vagrant website:
+        <ul>
+          <li>For general information, go to the <a href="https://www.vagrantup.com/">Vagrant official website</a></li>
+          <li>To learn more how to install Vagrant, go to the <a href="https://www.vagrantup.com/docs/installation/">Vagrant installation procedure</a></li>
+        </ul>
+      </li>
+      <li>Add the Vagrant directory to the <code class="highlighter-rouge">PATH</code>; see the <a href="https://www.vagrantup.com/docs/other/environmental-variables.html">instruction on setting it on Windows</a>.
+        <blockquote>
+          <p><strong>Note</strong>: You should install the 2.1.1 version of Vagrant and the 1.0.6 version of the Vagrant image.</p>
+        </blockquote>
+      </li>
+    </ol>
+  </li>
+  <li>Install Nugrant:
+    <ol>
+      <li>Go to the <a href="https://github.com/maoueh/nugrant">Nugrant Github repository</a>. To learn more how to install the Nugrant plugin, go to the <a href="https://github.com/maoueh/nugrant#installation">Nugrant installation procedure</a>.</li>
+      <li>Set <code class="highlighter-rouge">http_proxy</code> and <code class="highlighter-rouge">https_proxy</code> environment variables.
+        <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nb">export </span><span class="nv">http_proxy</span><span class="o">=</span>http://PROXY_USER:PROXY_PASSWORD_HERE@proxy.server.com:80/
+ <span class="nb">export </span><span class="nv">https_proxy</span><span class="o">=</span>http://PROXY_USER:PROXY_PASSWORD_HERE@proxy.server.com:80/
+</code></pre></div>        </div>
+        <blockquote>
+          <p><strong>Info</strong>: If your password contains non-alphanumeric characters, you need to encode it before exporting variables. Use this site to encode your password and put the value instead of the <code class="highlighter-rouge">PROXY_PASSWORD_HERE</code> string.</p>
+        </blockquote>
+      </li>
+      <li>Execute the following command:
+        <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> vagrant plugin install nugrant
+</code></pre></div>        </div>
+        <p>Once both, Vagrant and Nugrant, are installed, you can use either PowerShell, cmd, or Cygwin when working with Vagrant.</p>
+      </li>
+    </ol>
+
+    <blockquote>
+      <p><strong>Info</strong>: If you do not have a private key generated, you can use <code class="highlighter-rouge">PuTTYgen.exe</code> to generate one. To do so, follow the <a href="https://www.ssh.com/ssh/putty/windows/puttygen">key generator instruction</a>. Note that the private key shouldn’t be password protected.</p>
+    </blockquote>
+
+    <ul>
+      <li>If you use Cygwin you need to have a private key in <code class="highlighter-rouge">~/.ssh/id_rsa</code>.</li>
+      <li>If you use PowerShell or cmd, you need to have a private key in <code class="highlighter-rouge">%USERPROFILE%\.ssh\id_rsa</code>.</li>
+    </ul>
+  </li>
+  <li>Check out the <code class="highlighter-rouge">box-run</code> sources from the <a href="http://git.server.com/box-run.git">Git project</a>.</li>
+  <li>Edit <code class="highlighter-rouge">.vagrantuser</code> file to specify whether to:
+    <ol>
+      <li>Use CNTLM to get guest access</li>
+      <li>Limit of memory and CPUs assigned</li>
+      <li>Install additional software</li>
+      <li>Start GUI</li>
+    </ol>
+
+    <blockquote>
+      <p><strong>Note</strong>: If you run the image for the very first time or the global password has changed export the following environment variables: <code class="highlighter-rouge">PROXY_USER</code> and <code class="highlighter-rouge">PROXY_PASS</code>. This can be done only once as the proper configuration file will be kept in the virtual machine. Do not HTML encode password if it contains non-alphanumeric characters but you should wrap it with double quotes.</p>
+    </blockquote>
+  </li>
+  <li>Before running any command, double check whether all files in the project contain UNIX-style line endings. If not, you need to convert them to UNIX format line endings.</li>
+  <li>Unset <code class="highlighter-rouge">http_proxy</code> and <code class="highlighter-rouge">https_proxy</code> environment variables.</li>
+  <li>Add a box (the image) to the Vagrant registry:
+    <ol>
+      <li>Open a terminal and go the project’s directory.</li>
+      <li>Execute the following command:
+        <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> vagrant box add metadata.json
+</code></pre></div>        </div>
+        <blockquote>
+          <p><strong>Note</strong>: 
+You can run the command only if there is no image in the local repository or a new version of the image is required.
+If you already have the image in the repository and want to replace it, first of all, remove it:</p>
+          <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vagrant box remove centos-7-openshift.box
+</code></pre></div>          </div>
+          <p>and then, run the command to add the new image.</p>
+        </blockquote>
+      </li>
+    </ol>
+  </li>
+  <li>Check if the image has been added to the Vagrant registry:
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> vagrant box list
+</code></pre></div>    </div>
+  </li>
+  <li>When the box is successfully deployed in the Vagrant registry, you can run the virtual machine by executing the following command:
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> vagrant up
+</code></pre></div>    </div>
+  </li>
+  <li>When the virtual machine is up and running, you can ssh into the box using:
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vagrant ssh
+</code></pre></div>    </div>
+    <blockquote>
+      <p><strong>Info</strong>: When you stop working with the instance and want to halt the virtual machine, execute the command:</p>
+      <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vagrant halt
+</code></pre></div>      </div>
+    </blockquote>
+  </li>
+</ol>
+
+
+      <footer class="site-footer">
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com/">GitHub Pages</a>.</span>
+      </footer>
+    </section>
+
+    
+  
+
+</body></html>
