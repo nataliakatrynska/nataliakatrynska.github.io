@@ -23,3 +23,4 @@ post_date: 2018-10-17 19:38:00
  	<li><span style="font-weight: 400;">Find some technical details in the </span><a href="http://nataliakatrynska.github.io" target="_blank" rel="noopener"><span style="font-weight: 400;">documentation guide</span></a><span style="font-weight: 400;"> explaining how to build and run the OpenShift platform in the virtual environment.</span></li>
 </ul>
 <span style="font-weight: 400;">If you want to share your experience about the usability of the environment, your overall feelings of the platform, or issues you might face, leave a comment below, so we can share our knowledge with you and other users :).</span>
+<span style="font-weight: 400;">Happy building!</span>
