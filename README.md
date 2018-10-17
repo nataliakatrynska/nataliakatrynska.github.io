@@ -1,8 +1,3 @@
----
-post_title: 'Setting up a Local Virtual Environment for the OpenShift Platform'
-layout: post
-published: false
----
 # Setting up a Local Virtual Environment for the OpenShift Platform
 
 To freely develop the OpenShift platform and build on top of it other applications, you need to have access to a local environment. Since you use Windows as an operating system and the platform runs on RedHat Linux, the idea is to set up a virtual environment with the platform that reflects the real one on Amazon Web Services. You are going to use a set of tools that help you to aim this goal - all of them are listed below.
