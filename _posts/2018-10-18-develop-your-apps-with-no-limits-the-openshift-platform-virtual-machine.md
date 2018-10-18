@@ -1,7 +1,7 @@
 ---
 ID: 28
 post_title: >
-  Develop Your Apps with No Limits the
+  Develop Your Apps with No Limits. The
   OpenShift Platform Virtual Machine
 author: admin
 post_excerpt: ""
