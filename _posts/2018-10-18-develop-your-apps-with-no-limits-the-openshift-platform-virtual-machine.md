@@ -26,4 +26,4 @@ post_date: 2018-10-18 05:40:20
 &nbsp;
 <span style="font-weight: 400;">Happy building!</span>
 &nbsp;
-<span style="font-weight: 400;">Edit: Thank you for participating in our session. The slides are already uploaded to the <a href="https://github.com/nataliakatrynska/nataliakatrynska.github.io/blob/master/Develop%20Your%20Apps%20with%20No%20Limits.%20The%20OpenShift%20Platform.pdf" target="_blank" rel="noopener">.</span><span style="font-weight: 400;">GitHub repository</span></a>
+<span style="font-weight: 400;">Edit: Thank you for participating in our session. The slides are already uploaded to the <a href="https://github.com/nataliakatrynska/nataliakatrynska.github.io/blob/master/Develop%20Your%20Apps%20with%20No%20Limits.%20The%20OpenShift%20Platform.pdf" target="_blank" rel="noopener"></span><span style="font-weight: 400;">GitHub repository</span></a>.
