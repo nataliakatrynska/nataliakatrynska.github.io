@@ -15,8 +15,6 @@ post_date: 2018-10-18 05:40:20
 
 <span style="font-weight: 400;">Originally, the OpenShift platform runs on RedHat Linux. Since most of the techies use the Windows operating system, we have introduced the VirtualBox as a virtual machine provider that comes along with a </span><span style="font-weight: 400;">base Linux image, </span><span style="font-weight: 400;">CentOS. On top of it, there is the OpenShift platform as well as other required tools such as </span><span style="font-weight: 400;">Maven, Git, Java, and CNTLM</span> <span style="font-weight: 400;">to handle an Internet access via a Sabre corporate proxy. The local image is built using Packer</span> <span style="font-weight: 400;">and, once it’s set, you can run the mirrored AWS environment locally.</span> <span style="font-weight: 400;">The idea behind this is to allow engineers, developers, and all tech experts to make the platform up and running on their own computer and give full control during the development process.</span>
 
-&nbsp;
-
 <span style="font-weight: 400;">Want to get some more insight into it? You can either:</span>
 <ul>
  	<li><span style="font-weight: 400;">Grab some coffee and come to our brown bag session when you can freely ask about all aspects of this new technology:</span></li>
